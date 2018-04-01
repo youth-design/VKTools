@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>VKTools</title>
+  <link rel="stylesheet" href="styles/index.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+    crossorigin="anonymous">
+</head>
+
+<body>
+
+  <h2>Вы не авторизированны!</h2>
+  <form action="" id="auth_form">
+    <div class="inputs">
+      <div class="form-group">
+        <input type="text" class="form-control" placeholder="Логин">
+      </div>
+      <div class="form-group">
+        <input type="password" class="form-control" placeholder="Пароль">
+      </div>
+      <div id="captcha_handler">
+        <div id="captcha_img"></div>
+        <input type="hidden" class="form-control" name="captcha_key" placeholder="Ключ каптчи">
+      </div>
+        <input type="submit" class="btn btn-outline-primary btn-sm" value="Войти">
+      <p id ="auth_fail">Не удалось авторизироваться</p>
+    </div>
+  </form>
+
+  <script src="renderer.js"></script>
+</body>
+
+</html>

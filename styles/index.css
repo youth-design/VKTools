@@ -1,0 +1,33 @@
+h2{
+    text-align: center;
+}
+form{
+    text-align: center;
+    margin-top: 20px;
+}
+form p{
+    margin: 0;
+    font-style: italic;
+    margin-top: 5px;
+    color: red;
+    opacity: 0;
+    transition: all 0.2s ease-in;
+}
+.auth_fail{
+    opacity: 1;
+}
+.inputs{
+    display: inline-block;
+    margin: 0;
+}
+
+input[type="submit"]{
+    width: 100%;
+}
+input[type="submit"]:focus{
+    box-shadow: none;    
+}
+
+#captcha_img, input[name="captcha_key"]{
+    margin-bottom: 10px;
+}

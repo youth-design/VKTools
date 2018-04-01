@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>VKTools</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+    <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/solid.js" integrity="sha384-+Ga2s7YBbhOD6nie0DzrZpJes+b2K1xkpKxTFFcx59QmVPaSA8c7pycsNaFwUK6l"
+        crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/fontawesome.js" integrity="sha384-7ox8Q2yzO/uWircfojVuCQOZl+ZZBg2D2J5nkpLqzH1HY0C1dHlTKIbpRz/LG23c"
+        crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+
+<body>
+    <div id="header">
+        <div id="button-group">
+            <button type="button" class="btn btn-outline-info active" data="parser">Парсер</button>
+            <button type="button" class="btn btn-outline-info" data="audio">Аудиозаписи</button>
+            <button type="button" class="btn btn-outline-info" data="document">Документы</button>
+        </div>
+    </div>
+
+    <div id="container">
+        <div id="parser">
+            <h1 class="display-4">Парсер</h1>
+            <p id="description">Парсит список лайкнувших пост людей в файл log.txt</p>
+            <input type="text" id="group_id" class="form-control" placeholder="Ссылка на пост">
+            <br>
+            <button class="btn btn-primary">Начать</button>
+        </div>
+
+        <div id="audio" style="display:none">
+            <div class="container">
+                <h1 class="display-4">Audio downloader</h1>
+                <div id="audio-control">
+                    <p>Управление:</p>
+                    <button type="button" class="btn btn-outline-primary btn-sm" name="refresh">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                    <button type="button" class="btn btn-outline-primary btn-sm" name="download">
+                        <i class="fas fa-download"></i>
+                    </button>
+                    <button type="button" class="btn btn-outline-primary btn-sm" name="check-all">
+                        <i class="fas fa-check"></i>
+                    </button>
+                    <div id="threads-controller">
+                        <input type="number" min="1", max="5" value="1">
+                        <span>Кол-во потоков</span>
+                    </div>
+                </div>
+                <div class="row" id="audios_container"></div>
+            </div>
+        </div>
+
+        <div id="document" style="display:none">
+            <h1 class="display-2">Находится в разработке</h1>
+        </div>
+    </div>
+
+    <script src="main_renderer.js"></script>
+</body>
+
+</html>
