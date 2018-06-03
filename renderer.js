@@ -30,35 +30,26 @@ function getToken() {
 }
 
 
-// // Captcha handler
-// function captchaHandler(body) {
-//     var captcha_sid = null;
-//     var img= null;
-//     if($(body).find("input[name=captcha_sid]").length) {
-//         captcha_sid = $(body).find("input[name=captcha_sid]").attr('value');
-//         img = $(body).find('img[id=captcha]');
-//         request("https://m.vk.com" + img[0].getAttribute('src'), {}, (err,res,body) => {
-//             // img[0].setAttribute('src', "https://m.vk.com" + img[0].getAttribute('src'));
-
-
-//             $("input[name=captcha_key]").attr('type', 'text');
-//             $("input[name=captcha_key]").attr('data', captcha_sid);
-//             // $("#captcha_img").append(img);
-//             $("#captcha_img").append(body);
-//             return true;
-//         });
-//     }
-//     else return false;
-    
-// }
-
-
 function auth(login, password) {
+    if ($("input[name=captcha_key]").val()) {
+            var options = {
+                form: {
+                    email: login,
+                    pass: password,
+                    captcha_key: $("input[name=captcha_key]").val(),
+                    captcha_sid: $("input[name=captcha_sid]").attr('value'),
+                }
+            }
+
+    }
+    else {
     var options = {
         form: {
             email: login,
             pass: password,
-        }}
+        }
+    }
+    }
         request("http://m.vk.com", {}, (err, res, body) => {
         action = $(body).find('form[method=post]').attr('action');
 
@@ -68,8 +59,18 @@ function auth(login, password) {
                 getToken();
                 console.log(remote.getGlobal('Storage'.token));
             } else {
-                $("#auth_fail").addClass("auth_fail");
-                setTimeout(() => {$(".auth_fail").removeClass('auth_fail')},3000);
+                if($(body).find("#captcha")) {
+                    var img = document.createElement('img');
+                    img.setAttribute('src', "https://vk.com/" + $(body).find("#captcha").attr('src'));
+                    document.querySelector("#captcha_img").innerHTML = "";
+                    document.querySelector("#captcha_img").appendChild(img);
+                    document.querySelector("input[name=captcha_key]").setAttribute('type', 'text');
+                    document.querySelector('input[name=captcha_sid]').setAttribute('value', $(body).find("input[name=captcha_sid]").attr('value'));
+                }
+                else {
+                    $("#auth_fail").addClass("auth_fail");
+                    setTimeout(() => {$(".auth_fail").removeClass('auth_fail')},3000);
+                }
             }
         });
     });
