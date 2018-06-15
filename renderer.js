@@ -57,7 +57,6 @@ function auth(login, password) {
             if ($(body).find(".op_fcont").length > 0) {
                 remote.getGlobal('Storage').session = res.request.headers.cookie;
                 getToken();
-                console.log(remote.getGlobal('Storage'.token));
             } else {
                 if($(body).find("#captcha")) {
                     var img = document.createElement('img');

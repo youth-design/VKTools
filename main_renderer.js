@@ -216,7 +216,12 @@ function getSong(target, callback) {
     }
 
     var url = a($(target).attr('link'));
+
+    if (!fs.existsSync("downloads")) 
+        fs.mkdir("downloads");
+        
     var file = fs.createWriteStream("./downloads/" + $(target).find('p').text() + ".mp3");
+    
 
     request(url).on('response', (res) => {
         var length = res.headers['content-length'];
