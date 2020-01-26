@@ -21,7 +21,7 @@ var user_id = null;
 function makeRequest(method, params, callback) {
     var url = "https://api.vk.com/method/" + method + "?" + params + "&access_token=" + token + "&v=5.8";
     request(url, {}, (err,res,body) => {
-        callback(body);   
+        callback(body);
     })
 }
 
@@ -32,16 +32,16 @@ $("#button-group").click((e) => {
         $("#"+data).fadeOut(200);
     }
     $("#button-group .active").removeClass('active');
-    
-    
+
+
     if(e.target == $("#button-group > .active")) return;
 
     $(e.target).addClass('active');
     var data = $(e.target).attr('data');
     setTimeout(() =>{
         $("#"+data).fadeIn(200);
-    },200) 
-    
+    },200)
+
 });
 
 
@@ -80,7 +80,7 @@ function parser() {
             } else{};
         })();
         function displayInfo(body) {
-            body = JSON.parse(body);  
+            body = JSON.parse(body);
             body.response.forEach((e) => {
                 var res = (e.first_name + " " + e.last_name).padEnd(40);
                 if(e.sex == 1) res += "Ж".padEnd(3);
@@ -103,7 +103,7 @@ function parser() {
         if(users.ids.length < (body.response.count - 1)) {
             makeRequest("likes.getList", "type=post&owner_id=" + post_id.split('_')[0] + "&item_id=" + post_id.split('_')[1] + "&count=1000&offset=" + ~~(users.count / users.ids.length) * 1000, getAllUsers);
         } else {
-            getAllInfo();   
+            getAllInfo();
         }
     }
     var link = $("#parser input[type=text]").val();
@@ -122,7 +122,7 @@ $("#audio #audio-control button[name=refresh]").click(() => {
 })
 $("#audio #audio-control button[name=check-all]").click(() => {
     var i = false;
-    
+
     $.makeArray($(".audio-item")).forEach((e) => {
         if(!$(e).hasClass('song-checked')) i = true;
     })
@@ -144,10 +144,10 @@ $("#audio #audio-control button[name=download]").click(() => {
    }
    function worker() {
        if((i) < songs.length){
-        getSong(songs[i],worker); 
+        getSong(songs[i],worker);
         i+=1;
-       }   
-       else $("#audio #audio-control button[name=download]").removeClass('disabled');   
+       }
+       else $("#audio #audio-control button[name=download]").removeClass('disabled');
    }
 
 })
@@ -198,13 +198,13 @@ function getSong(target, callback) {
         }
         return e
     }
-    
+
     function r(e) {
         if (!e || e.length % 4 == 1) return !1;
         for (var t, i, o = 0, a = 0, r = ""; i = e.charAt(a++);) i = n.indexOf(i), ~i && (t = o % 4 ? 64 * t + i : i, o++ % 4) && (r += String.fromCharCode(255 & t >> (-2 * o & 6)));
         return r
     }
-    
+
     function s(e, t) {
         var n = e.length,
             i = [];
@@ -217,16 +217,16 @@ function getSong(target, callback) {
 
     var url = a($(target).attr('link'));
 
-    if (!fs.existsSync("downloads")) 
+    if (!fs.existsSync("downloads"))
         fs.mkdir("downloads");
-        
+
     var file = fs.createWriteStream("./downloads/" + $(target).find('p').text() + ".mp3");
-    
+
 
     request(url).on('response', (res) => {
         var length = res.headers['content-length'];
         var downloaded = 0;
-        
+
         res.on('data', (chunk) => {
             downloaded += chunk.length;
             $(target).find('.status').css("width", (100.0 * downloaded / length).toFixed(1) + "%");
@@ -242,7 +242,7 @@ function getSong(target, callback) {
         })
 
     }).pipe(file);
-    
+
 }
 
 function getAudioList() {
@@ -251,20 +251,20 @@ function getAudioList() {
         all: [],
     }
     request("https://m.vk.com",{},(err,res,body) => {
-        user_id = $($(body).find("._cntrs").children()['2']).attr('src').split("id=")[1].split("&")[0];
+        user_id = body.match(/id\d{4,10}/m)[0].split('id')[1];
         var i = 0;
 
         (function () {
             if(i < audios.count) {
-                request.post("https://m.vk.com/audios" + user_id, {
+                request.post("https://m.vk.com/audio", {
                     form: {
                         _ajax: 1,
                         offset: i,
                     }}, (err, res, body) => {
-                    $.makeArray($(body).find(".audio_item")).forEach((e) => {
+                    $.makeArray($(body).find(`.AudioPlaylistRoot[data-playlist-id=audios${user_id}] .audio_item`)).forEach((e) => {
                         var link = $(e).find(".ai_play").attr('style');
                         if(link) link = link.split('url(')[1].split(')')[0];
-                        item = {
+                            item = {
                             title: $(e).find("span[class=ai_title]").html(),
                             artist: $(e).find("span[class=ai_artist]").html(),
                             data: $(e).attr('data-id'),
@@ -284,16 +284,16 @@ function getAudioList() {
                     if(e.image)
                         container.append("<div class='audio-item' data_id='" + e.data + "' link='" + e.link + "' ><img src='" + e.image + "'><p><strong>" + e.title + "</strong> - " + e.artist + "</p><div class='status'></div><span class='percent-status'></span></div>");
                     else if(e.artist == undefined && e.title == undefined);
-                    else    
+                    else
                         container.append("<div class='audio-item' data_id='" + e.data + "' link='" + e.link + "' ><img src='./media/music.png'><p><strong>" + e.title + "</strong> - " + e.artist + "</p><div class='status'></div><span class='percent-status'></span></div>");
                     $(".audio-item").last().click((e) => {
-                        if($(e.currentTarget).hasClass('song-checked')) 
-                            $(e.currentTarget).removeClass('song-checked');                            
+                        if($(e.currentTarget).hasClass('song-checked'))
+                            $(e.currentTarget).removeClass('song-checked');
                         else $(e.currentTarget).addClass('song-checked');
                     })
                 })
-                $("#audio #audio-control button[name=refresh]").removeClass('disabled');       
-            }            
+                $("#audio #audio-control button[name=refresh]").removeClass('disabled');
+            }
         })();
     })
 }
